@@ -1,0 +1,80 @@
+---
+title: "585 HW2"
+author: "Weixiao Li"
+date: "`r Sys.Date()`"
+output:
+   pdf_document:
+       latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Problem 1
+```{r}
+smartsales <- read.csv("C:/Users/16932/Desktop/MA585/smartsales.csv")
+holidaygifts <- read.csv("C:/Users/16932/Desktop/MA585/holidaygifts.csv")
+randomtopics <- read.csv("C:/Users/16932/Desktop/MA585/randomtopics.csv")
+```
+
+```{r}
+travel_expenditure <- read.csv("C:/Users/16932/Desktop/MA585/travel expenditure.csv")
+
+```
+
+
+```{r}
+library(TSA)
+```
+
+
+```{r}
+plot.ts(travel_expenditure, ylab="expenditure of travel",xlab="Month")
+title("Google Search for Travel Expenses from 2014 to date")
+
+```
+This plot shows a time series with a clear trend component.It has a clear downward trend over the years, indicating the decreasing expenditure of travel. I think the reason for it is the decreasing travel cost.
+
+
+```{r}
+plot.ts(holidaygifts, ylab="holiday gifts",xlab="Day")
+title("Daily Google Search for Holiday Gifts in the Last 50 Days")
+```
+The plot of "holiday gifts" shows a clear seasonal pattern, it upwards sharply in one day, indicating the increased demand for gift-giving during these times.
+
+```{r}
+plot.ts(randomtopics, ylab="Random topics",xlab="Day")
+title("Daily Google Search for Random Topics in the Last 50 Days")
+```
+This plot shows a time series with no clear trend or seasonal pattern and is poorly described.
+
+# Problem 2 
+```{r}
+BosClimateData <- read.csv("C:/Users/16932/Desktop/MA585/BosClimateData (1).csv")
+BosData=subset(BosClimateData,BosClimateData$STATION_NAME=="BOSTON LOGAN INTERNATIONAL AIRPORT MA US")
+```
+
+```{r}
+plot.ts(BosData[,c(4:7)])
+```
+For TPCP and TSNW, there is not obvious trend.
+For MMNT and MMXT, there are periodic trend.
+
+```{r}
+length(subset(BosData$TSNW,BosData$TSNW>1))/length(BosData$TSNW)
+length(subset(BosData$MMXT,BosData$MMXT>80))/length(BosData$MMXT)
+```
+There are 38.5% months had total snowfall greater than a foot.
+There are 70.83% months mean maximum temperature exceeded 80F.
+
+# Problem 3
+```{r}
+plot.ts(rnorm(100))
+```
+It looks like random.
+
+```{r}
+plot.ts(rt(n=100, df=4))
+```
+The data is skewed in one direction, it suggest that the data generating process may not be Gaussian.

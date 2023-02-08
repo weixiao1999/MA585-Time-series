@@ -62,10 +62,10 @@ For TPCP and TSNW, there is not obvious trend.
 For MMNT and MMXT, there are periodic trend.
 
 ```{r}
-length(subset(BosData$TSNW,BosData$TSNW>1))/length(BosData$TSNW)
+length(subset(BosData$TSNW,BosData$TSNW>304.8))/length(BosData$TSNW)
 length(subset(BosData$MMXT,BosData$MMXT>80))/length(BosData$MMXT)
 ```
-There are 38.5% months had total snowfall greater than a foot.
+There are 12.5% months had total snowfall greater than a foot.
 There are 70.83% months mean maximum temperature exceeded 80F.
 
 # Problem 3

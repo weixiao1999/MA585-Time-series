@@ -1,0 +1,113 @@
+---
+title: "585 Final"
+author: "Weixiao Li"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tseries)
+library(lubridate)
+```
+
+
+
+```{r}
+data <- read.csv("D:/585/MA585-Time-series/Final/data/weather data/data.csv")
+```
+
+
+
+
+```{r}
+#data$date <- as.Date(as.character(data$date), format = "%Y%m%d")
+#as.Date(as.character(data$date),"%Y%m%d")
+#class(as.Date(as.character(data$date),"%Y%m%d"))
+#data_new <- with(data, data[(date >= "20100101" & date <= "20230101") , ])
+data$mean <- (data$min+data$max)/2
+```
+
+
+```{r}
+#d1 <- with(data, data[(date =="20120501"|date=="20120601"|date=="20120701"|date=="20120801"|date=="20120901"|data=="20121001") , ])
+
+d1 <- dplyr::filter(data,data$date=="20100101"|data$date=="20100201"|data$date=="20100301"|data$date=="20100401"|data$date=="20100501"| data$date=="20100601"|data$date=="20100701"|data$date=="20100801"|data$date=="20100901"|data$date=="20101001"|data$date=="20101101"|data$date=="20101201"|
+                    
+data$date=="20110101"|data$date=="20110201"|data$date=="20110301"|data$date=="20110401"|data$date=="20110501"|data$date=="20110601"|data$date=="20110701"|data$date=="20110801"|data$date=="20110901"|data$date=="20111001"|data$date=="20111101"|data$date=="20111201"|
+                    
+data$date=="20120101"|data$date=="20120201"|data$date=="20120301"|data$date=="20120401"|data$date=="20120501"|data$date=="20120601"|data$date=="20120701"|data$date=="20120801"|data$date=="20120901"|data$date=="20121001"|data$date=="20121101"|data$date=="20121201"|
+                      data$date=="20130101"|data$date=="20130201"|data$date=="20130301"|data$date=="20130401"|data$date=="20130501"|data$date=="20130601"|data$date=="20130701"|data$date=="20130801"|data$date=="20130901"|data$date=="20131001"|data$date=="20131101"|data$date=="20131201"|
+                      data$date=="20140101"|data$date=="20140201"|data$date=="20140301"|data$date=="20140401"|data$date=="20140501"|data$date=="20140601"|data$date=="20140701"|data$date=="20140801"|data$date=="20140901"|data$date=="20141001"|data$date=="20141101"|data$date=="20141201"|
+                      data$date=="20150101"|data$date=="20150201"|data$date=="20150301"|data$date=="20150401"|data$date=="20150501"|data$date=="20150601"|data$date=="20150701"|data$date=="20150801"|data$date=="20150901"|data$date=="20151001"|data$date=="20151101"|data$date=="20151201"|
+
+                      data$date=="20160101"|data$date=="20160201"|data$date=="20160301"|data$date=="20160401"|data$date=="20160501"|data$date=="20160601"|data$date=="20160701"|data$date=="20160801"|data$date=="20160901"|data$date=="20161001"|data$date=="20161101"|data$date=="20161201"|
+  
+data$date=="20170101"|data$date=="20170201"|data$date=="20170301"|data$date=="20170401"|data$date=="20170501"|data$date=="20170601"|data$date=="20170701"|data$date=="20170801"|data$date=="20170901"|data$date=="20171001"|data$date=="20171101"|data$date=="20181201"|
+    
+data$date=="20180101"|data$date=="20180201"|data$date=="20180301"|data$date=="20180401"|data$date=="20180501"|data$date=="20180601"|data$date=="20180701"|data$date=="20180801"|data$date=="20180901"|data$date=="20181001"|data$date=="20181101"|data$date=="20181201"|
+
+data$date=="20190101"|data$date=="20190201"|data$date=="20190301"|data$date=="20190401"|data$date=="20190501"|data$date=="20190601"|data$date=="20190701"|data$date=="20190801"|data$date=="20190901"|data$date=="20191001"|data$date=="20191101"|data$date=="20191201"|
+
+data$date=="20200101"|data$date=="20200201"|data$date=="20200301"|data$date=="20200401"|data$date=="20200501"|data$date=="20200601"|data$date=="20200701"|data$date=="20200801"|data$date=="20200901"|data$date=="20201001"|data$date=="20201101"|data$date=="20201201"|
+
+data$date=="20210101"|data$date=="20210201"|data$date=="20210301"|data$date=="20210401"|data$date=="20210501"|data$date=="20210601"|data$date=="202120701"|data$date=="20210801"|data$date=="20210901"|data$date=="20211001"|data$date=="20211001"|data$date=="20211201"|
+  
+data$date=="20220101"|data$date=="20220201"|data$date=="20220301"|data$date=="20220401"|data$date=="20220501"|data$date=="20220601"|data$date=="20220701"|data$date=="20220801"|data$date=="20220901"|data$date=="20221001"|data$date=="20221101"|data$date=="20221201")
+```
+
+
+```{r}
+d1$date <- as.Date(as.character(d1$date), format = "%Y%m%d")
+d1 <- d1[,-2:-5]
+```
+
+#result
+```{r}
+
+d1$date <- as.Date(d1$date)
+myts <- ts(d1$mean, start = c(year(d1$date[1]), 1), frequency = 12)
+plot.ts(myts, main = "Average temperature", xlab = "Date", ylab = "Fahrenheit")
+```
+
+```{r}
+
+z <- decompose(myts,type="additive")
+plot(z)
+adf.test(myts)
+kpss.test(myts,null="Trend")
+```
+The null hypothesis of the ADF test is that the time series has a unit root, or is non-stationary. If the p-value is less than or equal to the chosen significance level (usually 0.05), then the null hypothesis can be rejected and the time series can be considered stationary.
+
+```{r}
+par(mfrow=c(1,2))
+acf(myts)
+pacf(myts)
+
+```
+
+
+
+
+
+
+```{r}
+m5 <- dplyr::filter(data,data$date>="20120501"& data$date<="20120531")
+m5 <- dplyr::filter(data,data$date>="20120501"& data$date<="20120531")
+
+m5 <- dplyr::filter(data,data$date>="20120501"& data$date<="20120531")
+m5 <- dplyr::filter(data,data$date>="20120501"& data$date<="20120531")
+m5 <- dplyr::filter(data,data$date>="20120501"& data$date<="20120531")
+m5 <- dplyr::filter(data,data$date>="20120501"& data$date<="20120531")
+m5 <- dplyr::filter(data,data$date>="20120501"& data$date<="20120531")
+m5 <- dplyr::filter(data,data$date>="20120501"& data$date<="20120531")
+m5 <- dplyr::filter(data,data$date>="20120501"& data$date<="20120531")
+m5 <- dplyr::filter(data,data$date>="20120501"& data$date<="20120531")
+m5 <- dplyr::filter(data,data$date>="20120501"& data$date<="20120531")
+m5 <- dplyr::filter(data,data$date>="20120501"& data$date<="20120531")
+
+```
+

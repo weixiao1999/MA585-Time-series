@@ -1,0 +1,55 @@
+---
+title: "585 Final project"
+author: "Weixiao Li"
+date: "`r Sys.Date()`"
+output:
+   pdf_document:
+       latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+data <- read.csv("D:/585/MA585-Time-series/Final/data/Boston-data.csv")
+library(tseries)
+library(lubridate)
+```
+
+#Dataset
+```{r}
+data$Period.End.Month <- as.POSIXct( data$Period.End.Month, format = "%Y/%m/%d")
+data$Median.Sale.Price <- as.numeric(gsub("\\$|K", "", data$Median.Sale.Price ))
+data$Median.Sale.Price <- data$Median.Sale.Price * 1000
+data <- data[, -1]
+data <- data[,-3:-17]
+data <- data[,-3:-4]
+```
+
+
+#Result
+```{r}
+data$Period.End.Month <- as.Date(data$Period.End.Month)
+myts <- ts(data$Median.Sale.Price, start=c(year(data$Period.End.Month[1]), 1), frequency = 12)
+
+plot.ts(myts, main = "Boston Real Estate Sale Price", xlab = "Date", ylab = "US Dollars")
+```
+
+```{r}
+z <- decompose(myts)
+plot(z)
+logts <- log(myts)
+myts_new=diff((logts),lag=1)
+plot(myts_new,main = " Log of Boston Real Estate Sale Price")
+adf.test(myts_new)
+
+```
+#ARIMA
+```{r}
+par(mfrow=c(1,2))
+acf(myts_new)
+pacf(myts_new)
+```
+
+In order to forecast the future price of Boston single family residential. I apply ARIMA model. From the ACF and PACF plots we can see that ACF cut off after lag2 and then decaying to zero, while PACF cut off nearlag 1 decaying to zero
